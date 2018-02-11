@@ -1,6 +1,6 @@
-export default function cars(state = [], action) {
+export default function articles(state = [], action) {
   switch (action.type) {
-    case 'LOAD_ARTICLES':
+    case 'GET_ARTICLES':
       return action.payload
       break;
     case 'ARTICLES_LOADED':

@@ -74,3 +74,7 @@
 div.App div.row div.main{
   border-left: dotted 5px #4abde5;
 }
+
+.closeModal{
+  float: left;
+}

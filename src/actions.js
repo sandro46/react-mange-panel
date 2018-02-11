@@ -14,5 +14,4 @@ const loadArticles = function (){
     'promise': getArticles()
   }
 }
-
 export { loadCars, loadArticles }
