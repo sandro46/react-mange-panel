@@ -11,9 +11,9 @@ const getCars = function () {
       });
   })
 }
-const getArticles = function () {
+const getArticles = function (id = null) {
   return new Promise(function(resolve, reject) {
-    axios.get('http://malina.ru/api/articles')
+    axios.get('http://malina.ru/api/articles'+(id ? '/'+id : ''))
       .then(function (response) {
         resolve(response);
       })
@@ -22,5 +22,64 @@ const getArticles = function () {
       });
   })
 }
+const upArt = function (data) {
+  return new Promise(function(resolve, reject) {
+    axios.put('http://malina.ru/api/articles', data)
+      .then(function (response) {
+        resolve(response);
+      })
+      .catch(function (error) {
+        reject('error');
+      });
+  })
+}
+const addArt = function (data) {
+  return new Promise(function(resolve, reject) {
+    axios.post('http://malina.ru/api/articles', data)
+      .then(function (response) {
+        resolve(response);
+      })
+      .catch(function (error) {
+        reject('error');
+      });
+  })
+}
+const delArt = function (data) {
+  return new Promise(function(resolve, reject) {
+    axios.delete('http://malina.ru/api/articles/'+data)
+      .then(function (response) {
+        resolve(response);
+      })
+      .catch(function (error) {
+        reject('HTTP error');
+      });
+  })
+}
+const loadGal = function (data) {
+  return new Promise(function(resolve, reject) {
+    axios.get('http://malina.ru/api/gallery/'+data)
+      .then(function (response) {
+        resolve(response);
+      })
+      .catch(function (error) {
+        reject('HTTP error');
+      });
+  })
+}
+const addGalImg = function (data) {
+  let fd = new FormData();
+  fd.append('id_art', data.id_art);
+  fd.append('file', data.files['0']);
+  debugger;
+  return new Promise(function(resolve, reject) {
+    axios.post('http://malina.ru/api/gallery/'+data.art_id, fd)
+      .then(function (response) {
+        resolve(response);
+      })
+      .catch(function (error) {
+        reject('HTTP error');
+      });
+  })
+}
 
-export {getCars, getArticles};
+export {getCars, getArticles, upArt, addArt, delArt, loadGal, addGalImg};

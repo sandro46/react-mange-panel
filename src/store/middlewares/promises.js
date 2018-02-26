@@ -6,7 +6,8 @@ const middleware = store => next => action => {
   console.log(startAction);
 
   store.dispatch({type: startAction})
-  action.promise.then((data) => {
+  action.promise.then(
+    (data) => {
       store.dispatch({ type: successAction, payload: data.data })
     }, (error) => store.dispatch({
     type: failureAction,

@@ -1,74 +1,136 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {connect} from 'react-redux'
 import Modal from 'react-modal';
-
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
-  }
-};
+import Icon from 'react-icons-kit';
+import * as actions from './../../actions';
 
 class Modal_cu extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      modalIsOpen: false
+      modalIsOpen: false,
+      item: {}
     };
 
-    this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
   }
 
-  openModal() {
-    this.setState({modalIsOpen: true});
+  handleChange(event) {
+    let data = this.state.item;
+    data[event.target.name] = event.target.value;
+    this.setState({item: data});
+    // console.log(event.target);
   }
 
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
+  handleSubmit(event) {
+    event.preventDefault();
+    if(this.state.item.id){
+      this.props.upArticle(this.state.item)
+    }else {
+      // debugger;
+      this.props.addArticle(this.state.item)
+    }
   }
 
-  closeModal() {
-    this.setState({modalIsOpen: false});
+  componentDidMount(){
+
+    if(this.props.match.params.id){
+      this.props.loadArticles(this.props.match.params.id).promise
+              .then((res, rej) => {
+                this.setState({item: this.props.articles[0]})
+              });
+    }
   }
 
   render() {
-    return (
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-          <span style={{cursor: 'pointer'}} className="float-right" onClick={this.closeModal}>
-            <Icon icon={ic_clear} />
-          </span>
-          <div>
-            <h2 ref={subtitle => this.subtitle = subtitle}>123</h2>
+    // debugger;
+    let item = {}
+    let content = '';
+    if(this.state.item) {
+      content = (
+        <form method="POST" onSubmit={this.handleSubmit}>
+          <input type="hidden" name="id"
+            value={this.state.item.id ? this.state.item.id : ''} onChange={this.handleChange} />
+          <div className="form-row">
+            <div className="form-group col-md-6">
+              <label >Название статьи</label>
+              <input type="text" className="form-control" name="name"  placeholder=""
+                value={this.state.item.name ? this.state.item.name : ''} onChange={this.handleChange}
+                />
+            </div>
+            <div className="form-group col-md-6">
+              <label >Alias</label>
+              <input type="text" className="form-control" name="alias"  placeholder=""
+                value={this.state.item.alias ? this.state.item.alias : ''} onChange={this.handleChange}
+                />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group col-md-12">
+              <label >Преконтент</label>
+              <textarea className="form-control"
+                name="content_prev"
+                onChange={this.handleChange}
+                value={this.state.item.content_prev ? this.state.item.content_prev : ''}
+                >{this.state.item.content_prev ? this.state.item.content_prev : ''}
+              </textarea>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group col-md-12">
+              <label >Контент</label>
+              <textarea className="form-control"
+                name="content_full"
+                onChange={this.handleChange}
+                value={this.state.item.content_full ? this.state.item.content_full : ''}
+                >{this.state.item.content_full ? this.state.item.content_full : ''}
+              </textarea>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group col-md-4">
+              <label >Meta_title</label>
+              <input type="text" className="form-control" name="meta_title"  placeholder=""
+                value={this.state.item.meta_title ? this.state.item.meta_title : ''} onChange={this.handleChange}
+                />
+            </div>
+            <div className="form-group col-md-4">
+              <label >Meta_key</label>
+              <textarea className="form-control"
+                name="meta_key"
+                onChange={this.handleChange}
+                value={this.state.item.meta_key ? this.state.item.meta_key : ''}
+                >{this.state.item.meta_key ? this.state.item.meta_key : ''}
+              </textarea>
+            </div>
+            <div className="form-group col-md-4">
+              <label >Meta_desc</label>
+              <textarea className="form-control"
+                name="meta_desc"
+                onChange={this.handleChange}
+                value={this.state.item.meta_desc ? this.state.item.meta_desc : ''}
+                >{this.state.item.meta_desc ? this.state.item.meta_desc : ''}
+              </textarea>
+            </div>
           </div>
           <hr/>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Name:
-              <input type="text" name="name" value={this.state.formData.name ? this.state.formData.name : ''} onChange={this.handleChange} />
-            </label>
-            <label>
-              content_prev:
-              <input type="text" name="content_prev" value={this.state.formData.content_prev ? this.state.formData.content_prev : ''} onChange={this.handleChange} />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
-        </Modal>
+          <input className="btn btn-primary" type="submit" value="Submit" />
+        </form>
+      )
+    }else{
+      content = <h3>Запись не найдена</h3>
+    }
+
+    return (
+      <div>
+        {content}
+      </div>
     );
   }
 }
 
-export default Modal_cu;
+export default connect((state) => { return { articles: state.articles } }, actions)(Modal_cu)

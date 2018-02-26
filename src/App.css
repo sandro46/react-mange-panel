@@ -78,3 +78,14 @@ div.App div.row div.main{
 .closeModal{
   float: left;
 }
+
+.ReactModal__Overlay--after-open{
+  z-index: 999;
+  overflow-y: scroll;
+}
+.ReactModal__Content--after-open{
+  width: 70%;
+}
+/* .ReactModalPortal{
+   overflow-y: scroll;
+} */
