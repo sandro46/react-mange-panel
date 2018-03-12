@@ -1,4 +1,6 @@
-import {getCars, getArticles, upArt, addArt, delArt, loadGal, addGalImg} from './api'
+import {getCars, getArticles, upArt, addArt,
+        delArt, loadGal, addGalImg, setImgM,
+        delImgPromise, authUserAp} from './api'
 
 const loadCars = function (){
   return {
@@ -43,7 +45,7 @@ const delArticle = function (data){
 }
 const loadGallery = function (data){
   // debugger;
-  console.log('delArticle');
+  console.log('loadGallery');
   return {
     'type': 'PROMISE',
     'actions': ['GALLERY_LOADING', 'GALLERY_LOADED', 'GALLERY_LOAD_FAILURE'],
@@ -51,12 +53,38 @@ const loadGallery = function (data){
   }
 }
 const addImg = function (data){
-  // debugger;
-  console.log('delArticle');
+  console.log('addImg');
   return {
     'type': 'PROMISE',
     'actions': ['GALLERYIMG_ADDING', 'GALLERYIMG_ADDED', 'GALLERYIMG_ADD_FAILURE'],
     'promise': addGalImg(data)
   }
 }
-export { loadCars, loadArticles, upArticle, addArticle, delArticle, loadGallery, addImg }
+const setImgMain = function (id, art_id){
+  console.log('setImgMain');
+  return {
+    'type': 'PROMISE',
+    'actions': ['IMG_MAIN_SETTING', 'IMG_MAIN_SETED', 'IMG_MAIN_SET_FAILURE'],
+    'promise': setImgM(id, art_id)
+  }
+}
+const delImg = function (id){
+  console.log('delImg');
+  return {
+    'type': 'PROMISE',
+    'actions': ['IMG_DELETING', 'IMG_DELETED', 'IMG_DELETED_FAILURE'],
+    'promise': delImgPromise(id)
+  }
+}
+const authUser = function (name, pass){
+  console.log('authUser');
+  return {
+    'type': 'PROMISE',
+    'actions': ['USER_AUTHING', 'USER_AUTHED', 'USER_AUTH_FAILURE'],
+    'promise': authUserAp(name, pass)
+  }
+}
+export {
+          loadCars, loadArticles, upArticle, addArticle,
+          delArticle, loadGallery, addImg, setImgMain, delImg, authUser
+      }

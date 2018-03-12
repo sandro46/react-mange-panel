@@ -6,12 +6,14 @@ import NotFound from './NotFound'
 import Articles from './articles'
 import Modal_cu from './articles/modal_cu'
 import Gallery from './gallery'
+import Login from './Login'
 
 class Main extends Component {
   render() {
     return (
         <Switch>
           <Route exact path='/' component={Home}/>
+          <Route path='/login' component={Login}/>
           <Route path='/articles' component={Articles}/>
           <Route path='/about' component={About}/>
           <Route path="/edit_articles/:id" component={Modal_cu}/>

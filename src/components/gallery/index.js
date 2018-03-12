@@ -17,11 +17,24 @@ class Gallery extends Component {
     super(props);
 
     this.state = {
-      item: {}
+      item: {},
+      val: 'active'
     };
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.setMainImg = this.setMainImg.bind(this)
+  }
+
+  setMainImg(id, art_id) {
+    if(window.confirm('Вы уверены, что хотите сделать эту картинку основной?')) {
+      this.props.setImgMain(id, art_id)
+    }
+  }
+  delImg(id) {
+    if(window.confirm('Вы уверены, что хотите удвлить картинку?')) {
+      this.props.delImg(id)
+    }
   }
 
   handleSubmit(event) {
@@ -49,15 +62,35 @@ class Gallery extends Component {
   render() {
     return (
       <div>
-        <form method="POST" onSubmit={this.handleSubmit}>
-          <input type="hidden" name="art_id"
-          value={this.state.item.art_id ? this.state.item.art_id : ''} onChange={this.handleChange} />
-          <input type="file" name="img"
-            ref={input => {
-              this.fileInput = input;
-            }} />
-          <button type="submit" >Загрузить изображение</button>
-        </form>
+        <div className="row" style={{marginBottom: '10px'}}>
+          <div className="col-md-12">
+            <form method="POST" onSubmit={this.handleSubmit}>
+              <input type="hidden" name="art_id"
+              value={this.state.item.art_id ? this.state.item.art_id : ''} onChange={this.handleChange} />
+              <input type="file" name="img"
+                ref={input => {
+                  this.fileInput = input;
+                }} />
+              <button type="submit" >Загрузить изображение</button>
+            </form>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            {this.props.gallery.map((item) =>
+              <div key={item.id} className="img">
+                <div className='imgPanel'>
+                  <div className="btn-group btn-group-sm float-right " role="group" >
+                    <button type="button" onClick={this.setMainImg.bind(this, item.id, item.art_id)}
+                    className={`btn btn-primary ${item.is_main == 'Y' ? 'active' : ''}`} >Основная</button>
+                    <button type="button" className="btn btn-primary " onClick={this.delImg.bind(this, item.id)}  >Удалить</button>
+                  </div>
+                </div>
+                <img src={`http://malina.ru/img/gallery/${item.id}/tumb_${item.name}`} alt={item.name} />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     )
   }

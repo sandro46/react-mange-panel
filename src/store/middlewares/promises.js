@@ -10,9 +10,10 @@ const middleware = store => next => action => {
     (data) => {
       store.dispatch({ type: successAction, payload: data.data })
     }, (error) => store.dispatch({
-    type: failureAction,
-    error
-  }));
+                    type: failureAction,
+                    error
+                  })
+  );
   return next(action);
 }
 export default middleware;

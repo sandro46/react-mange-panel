@@ -7,7 +7,7 @@ import Header from './components/header';
 import Main from './components/main';
 import CarList from './components/ul';
 import Menu from './components/menu';
-import { withRouter, history} from 'react-router-dom'
+import { withRouter, history, Redirect} from 'react-router-dom'
 import './css/bootstrap.min.css'
 
 
@@ -19,18 +19,45 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div className="App">
-        <Header />
-        <div className="row col-md-12">
-          <div className='col-md-3'>
-            <Menu />
-          </div>
-          <div className='col-md-9 main'>
-            <Main />
+    let protect = () => {
+      return (
+        <div className="App">
+          <Header />
+          <div className="row col-md-12">
+            <div className='col-md-3'>
+              <Menu />
+            </div>
+            <div className='col-md-9 main'>
+              <Main />
+              {window.location.pathname == '/login' ? (
+                <Redirect
+                  to={{
+                    pathname: "/"
+                  }}
+                />
+              ) : ''}
+            </div>
           </div>
         </div>
-      </div>
+      )
+    }
+    let login = () => {
+      return (
+        <div className="App">
+          <Main />
+          {window.location.pathname != '/login' ? (
+            <Redirect
+              to={{
+                pathname: "/login"
+              }}
+            />
+          ) : ''}
+        </div>
+      )
+    }
+    // debugger;
+    return (
+      this.props.user.token ? protect() : login()
     );
   }
 }
@@ -44,8 +71,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    counter: state.counter,
-    cars: state.cars
+    user: state.user
   }
 }
 

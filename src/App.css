@@ -27,6 +27,15 @@
   to { transform: rotate(360deg); }
 }
 
+.img{
+  float: left;
+  margin: 0 10px 10px 0;
+}
+.imgPanel button{
+  padding: .15rem .2rem !important;
+  font-size: .475rem !important;
+}
+
 
 
 
